@@ -46,8 +46,8 @@ def main():
     #print(universityInternationalRank(topUni,'South Korea'))
     #print(universityNationalRank(topUni,'Canada'))
     #print(averageScore(topUni,'Japan'))
-    print(continentRelativeScore(topUni,capitals,'Japan'))
-
+    #print(continentRelativeScore(topUni,capitals,'Japan'))
+    #print(capitalCity(capitals,'Canada'))
 def universitiesCount(univ):
     return 'Total number of universities => ' + str(len(univ))
 
@@ -108,7 +108,7 @@ def continentRelativeScore(univ,capitals, country):
     continent = ''
     if country in dict:
         continent = dict[country]
-    print('conti',continent)
+    #print('conti',continent)
 
     for x, key in dict.items():
         if key == continent:
@@ -130,11 +130,22 @@ def continentRelativeScore(univ,capitals, country):
     avg = avg.replace('The average score => ', '')
     avg = avg.replace('%', '')
     avg = float(avg)
-    print('here',avg)
-    print(highest_score)
+    #print('here',avg)
+    #print(highest_score)
 
         #for i in countriesInContinent:
         #    if row[]
+    #print(avg)
+    #print(highest_score)
+    return 'The relative score to the top university in ' + continent.upper() + ' is => ' + f'({avg} / {highest_score}) ' \
+           + 'x 100% = ' +str(round(((avg / highest_score ) * 100), 2)) +'%'
 
-    return 'The relative score to the top university in ' + continent.upper() + ' is => ' + str(round(((avg / highest_score ) * 100), 2))
+def capitalCity(capitals,country):
+    #print(country)
+    for row in capitals:
+        if country in row:
+            return 'The capital is => ' + row[CAPITAL].upper()
+
+def universityCapitalName(capitals,country):
+    print()
 main()
