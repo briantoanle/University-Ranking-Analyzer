@@ -48,6 +48,7 @@ def main():
     #print(averageScore(topUni,'Japan'))
     #print(continentRelativeScore(topUni,capitals,'Japan'))
     #print(capitalCity(capitals,'Canada'))
+    print(universityCapitalName(topUni,capitals,'France'))
 def universitiesCount(univ):
     return 'Total number of universities => ' + str(len(univ))
 
@@ -146,6 +147,26 @@ def capitalCity(capitals,country):
         if country in row:
             return 'The capital is => ' + row[CAPITAL].upper()
 
-def universityCapitalName(capitals,country):
+def universityCapitalName(univ,capitals,country):
     print()
-main()
+    capital = ''
+    for row in capitals:
+        if country in row:
+            capital = row[CAPITAL]
+    institutionList = []
+    for row in univ:
+        # concatenate or else it would not return true
+
+        if capital in str(row[INSTITUTION]):
+            #print(row[INSTITUTION])
+            #print('here')
+            institutionList.append(row[INSTITUTION])
+    #print(capital)
+    #print(institutionList)
+    returnString = ''
+    for i in range(len(institutionList)):
+        returnString += f'    #{i+1} ' + institutionList[i].upper() + '\n'
+    return 'The universities that contain the capital name =>\n' + returnString
+def getInformation(country,rankingFile,capitalFile):
+
+#main()
