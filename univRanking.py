@@ -1,3 +1,4 @@
+import csv
 
 # univRanking
 WORLD_RANK = 0
@@ -43,14 +44,18 @@ def main():
 
     #print(availableCountries(topUni))
     #print(availableContinents(capitals))
-    #print(universityInternationalRank(topUni,'South Korea'))
+    #teststring = universityInternationalRank(topUni,'USA').replace(' ','').upper()
+    #print(teststring)
+    #print("ATINTERNATIONALRANK=>1THEUNIVERSITYNAMEIS=>HARVARDUNIVERSITY")
     #print(universityNationalRank(topUni,'Canada'))
+    print(universityInternationalRank(topUni,'usa'))
+    #print(universityInternationalRank(topUni, 'USA'))
     #print(averageScore(topUni,'Japan'))
     #print(continentRelativeScore(topUni,capitals,'Japan'))
     #print(capitalCity(capitals,'Canada'))
-    print(universityCapitalName(topUni,capitals,'France'))
+    #print(universityCapitalName(topUni,capitals,'France'))
 def universitiesCount(univ):
-    return 'Total number of universities => ' + str(len(univ))
+    return 'Total number of universities => ' + str(len(univ)-1)
 
 def availableCountries(univ):
     countries = []
@@ -66,22 +71,52 @@ def availableContinents(capitals):
         if row[CONTINENT].upper() not in continents:
             continents.append(row[CONTINENT].upper())
     return 'Available continents => ' + ', '.join(continents)
+def universityInternationalRank1(univ, country):
+    #print(country)
+    line = 0
+    internationalRanking = []
+    for row in univ:
+        #print('row',row[COUNTRY])
+        if row[COUNTRY] == country:
+            #print('hereee')
+            internationalRanking.append(row[WORLD_RANK])
+    print(internationalRanking)
+    #print(internationalRanking[0])
+    #rank = int(internationalRanking[0])
+    #print('rank',rank)
+    #print(univ[rank-1])
+    returnString = 'At international rank => ' + '10'
+    returnString2 =' the university name is => ' + str((univ[10][INSTITUTION]).upper())
+
+    #return 'At international rank => ' + str(internationalRanking[0]) + ' the university name is => ' + str((univ[rank-1][INSTITUTION]).upper())
+    #
+    #               print(returnString)
+    #returnString= returnString.upper()
+    return returnString
 
 def universityInternationalRank(univ, country):
     line = 0
     internationalRanking = []
+    #print('country',country)
     for row in univ:
-        if row[COUNTRY] == country:
-            internationalRanking.append(row[WORLD_RANK])
 
+        if row[COUNTRY].lower() == country.lower():
+            internationalRanking.append(row[WORLD_RANK])
+    #print(internationalRanking)
+    #print(internationalRanking[0])
     rank = int(internationalRanking[0])
     #print(univ[rank-1])
-    return 'At international rank => ' + str(internationalRanking[0]) + ' the university name is => ' + str((univ[rank-1][INSTITUTION]).upper())
+    returnString = 'At international rank => ' + str(internationalRanking[0]) + ' the university name is => ' + str((univ[rank][INSTITUTION]).upper())
+    #print(returnString)
+    #return 'At international rank => ' + str(internationalRanking[0]) + ' the university name is => ' + str((univ[rank-1][INSTITUTION]).upper())
+
+    #returnString= returnString.upper()
+    return returnString
 
 def universityNationalRank(univ, country):
     nationalRanking = []
     for row in univ:
-        if row[COUNTRY] == country:
+        if row[COUNTRY].lower() == country.lower():
             return 'At national rank => 1 the university name is => ' + str(row[INSTITUTION]).upper()
             #nationalRanking.append(row[NATIONAL_RANK])
     #return nationalRanking
@@ -91,10 +126,10 @@ def averageScore(univ, country):
     count = 0
 
     for row in univ:
-        if row[COUNTRY] == country:
+        if row[COUNTRY].lower() == country.lower():
             count +=1
             score += float(row[SCORE])
-
+    print()
     return 'The average score => ' + str(round((score/count),2)) + '%'
 
 
@@ -109,23 +144,27 @@ def continentRelativeScore(univ,capitals, country):
     continent = ''
     if country in dict:
         continent = dict[country]
+
+    #print(country)
     #print('conti',continent)
 
     for x, key in dict.items():
         if key == continent:
-            countriesInContinent.append(x)
+            countriesInContinent.append(x.lower())
+
 
     # find highest score in continent USA so North America
     highest_score = 0
     score = 0
     counter = 0
     for row in univ:
-        if row[COUNTRY] in countriesInContinent:
+        if row[COUNTRY].lower() in countriesInContinent:
             counter += 1
             score += float(row[SCORE])
             if float(row[SCORE]) > highest_score:
                 highest_score = float(row[SCORE])
 
+    #print("**** ",highest_score,countriesInContinent)
 
     avg = averageScore(univ,country)
     avg = avg.replace('The average score => ', '')
@@ -167,6 +206,38 @@ def universityCapitalName(univ,capitals,country):
     for i in range(len(institutionList)):
         returnString += f'    #{i+1} ' + institutionList[i].upper() + '\n'
     return 'The universities that contain the capital name =>\n' + returnString
-def getInformation(country,rankingFile,capitalFile):
+
+def loadCSVData(filename):
+    list=[]
+    fileContent = open(filename,"r",encoding='utf8')
+    for line in fileContent:
+        #next(fileContent)
+        line = line.lower()
+        data = line.strip().split(',')
+        # print("here", data)
+        # print(data)
+        list.append(data)
+
+    fileContent.close()
+    return list
+
+def getInformation(selectedCountry,rankingFileName,capitalsFileName):
+    univ = loadCSVData(rankingFileName)
+    capitals = loadCSVData(capitalsFileName)
+    selectedCountry = selectedCountry.lower()
+    with open('output.txt','w') as f:
+        f.write(universitiesCount(univ))
+        f.write(availableCountries(univ))
+        f.write(availableContinents(capitals))
+        #print("here", selectedCountry)
+
+        #print('selected',selectedCountry)
+        #print(universityInternationalRank(univ,selectedCountry))
+        f.write(universityInternationalRank(univ,selectedCountry))
+        f.write(universityNationalRank(univ,selectedCountry))
+        f.write(averageScore(univ,selectedCountry))
+        f.write(continentRelativeScore(univ,capitals,selectedCountry))
+        f.write(capitalCity(capitals,selectedCountry))
+        f.write(universityCapitalName(univ,capitals,selectedCountry))
 
 #main()

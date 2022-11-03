@@ -110,10 +110,10 @@ if "#1" in information and "#2" in information and "UNIVERSITYOFWASHINGTON" in i
 else:
     fail()
 
+'''
 
 
-
-
+'''
 selectedCountry ='south korea'
 univRanking.getInformation(selectedCountry, "TopUni.csv", "capitals.csv")
 
@@ -185,7 +185,6 @@ if "#1" in information and "SEOULNATIONALUNIVERSITY" in information:
    success()
 else:
     fail()
-
 
 
 
